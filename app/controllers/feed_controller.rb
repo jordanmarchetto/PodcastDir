@@ -46,7 +46,9 @@ class FeedController < ApplicationController
 
   def episode_xml
     result = ''
-    Dir.glob("#{ENV['PODCAST_EPISODE_PATH']}/*").each do |file|
+
+    # when running via docker, /media will be mapped to some local volume
+    Dir.glob("/media/*").each do |file|
       filename = File.basename(file)
       next if !filename.include?(".mp3")
 

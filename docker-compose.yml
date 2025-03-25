@@ -5,8 +5,6 @@ services:
     environment:
       POSTGRES_USER: '${DB_USER:-postgres}'
       POSTGRES_PASSWORD: '${DB_PASSWORD:-postgres}'
-    ports:
-      - "${EXTERNAL_DB_PORT:-5432}:5432"
     volumes:
       - podcast-dir-db:/var/lib/postgresql/data
     healthcheck:
@@ -20,6 +18,8 @@ services:
     restart: unless-stopped
     entrypoint: [bin/docker-entrypoint]
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - '${PODCAST_EPISODE_PATH}:/media'
     environment:
       DB_HOST: db
       DB_USER: '${DB_USER:-postgres}'
