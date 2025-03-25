@@ -26,7 +26,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t PodcastDir:latest .
+          docker build -t podcast-dir:latest .
 
       - name: Run Docker container in detached mode
         run: |
@@ -60,7 +60,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: jordanmarchetto/PodcastDir:latest
+          tags: jordanmarchetto/podcast-dir:latest
 
   deploy:
     needs: build
