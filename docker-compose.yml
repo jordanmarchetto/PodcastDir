@@ -26,6 +26,7 @@ services:
       DB_PASSWORD: '${DB_PASSWORD:-postgres}'
       DB_PORT: '${DB_PORT:-5432}'
       SECRET_KEY_BASE: '${SECRET_KEY_BASE:-1}'
+      PODCAST_EPISODE_URL: '${PODCAST_EPISODE_URL:-http://www.google.com/}'
     ports:
       - "${APP_PORT:-3000}:3000"
     depends_on:

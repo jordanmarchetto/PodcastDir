@@ -59,6 +59,7 @@ class FeedController < ApplicationController
       length = "18863" # TODO: calculate this
       duration = "12" # TODO: calculate this
       type = "audio/mpeg"
+      file_url = "#{PODCAST_EPISODE_URL}#{filename}"
 
       result << <<~XML
         <item>
@@ -68,7 +69,7 @@ class FeedController < ApplicationController
         <description><![CDATA[<p>#{description}</p>]]></description>
         <content:encoded><![CDATA[<p>#{description}</p>]]></content:encoded>
         <itunes:author>#{author}</itunes:author>
-        <enclosure url="#{filename}" length="#{length}" type="#{type}" />
+        <enclosure url="#{file_url}" length="#{length}" type="#{type}" />
         <guid isPermaLink="false">#{filename}</guid>
         <pubDate>#{pubDate}</pubDate>
         <itunes:duration>#{duration}</itunes:duration>
