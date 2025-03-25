@@ -48,12 +48,14 @@ class FeedController < ApplicationController
     result = ''
     Dir.glob("#{ENV['PODCAST_EPISODE_PATH']}/*").each do |file|
       filename = File.basename(file)
+      next if !filename.include?(".mp3")
+
       pubDate = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
       author = ENV['PODCAST_AUTHOR']
       title = "Ep: #{filename}"
       description = "Description of #{filename}"
       length = "18863" # TODO: calculate this
-      duration = "12"
+      duration = "12" # TODO: calculate this
       type = "audio/mpeg"
 
       result << <<~XML
