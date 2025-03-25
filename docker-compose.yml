@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: '${DB_USER:-postgres}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-postgres}'
+    ports:
+      - "${EXTERNAL_DB_PORT:-5432}:5432"
+    volumes:
+      - podcast-dir-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  podcast-dir:
+    build: .
+    restart: unless-stopped
+    entrypoint: [bin/docker-entrypoint.sh]
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      DB_HOST: db
+      DB_USER: '${DB_USER:-postgres}'
+      DB_PASSWORD: '${DB_PASSWORD:-postgres}'
+      DB_PORT: '${DB_PORT:-5432}'
+      SECRET_KEY_BASE: '${SECRET_KEY_BASE:-1}'
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: "service_healthy"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+ 
+volumes: 
+  podcast-dir-db:
