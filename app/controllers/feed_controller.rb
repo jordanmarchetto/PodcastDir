@@ -59,7 +59,7 @@ class FeedController < ApplicationController
       length = "18863" # TODO: calculate this
       duration = "12" # TODO: calculate this
       type = "audio/mpeg"
-      file_url = "#{PODCAST_EPISODE_URL}#{filename}"
+      file_url = "#{ENV['PODCAST_EPISODE_URL']}#{filename}"
 
       result << <<~XML
         <item>
