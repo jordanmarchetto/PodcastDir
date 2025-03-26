@@ -8,7 +8,7 @@ class FeedController < ApplicationController
   private
 
   def channel_xml
-    podcast_url = ENV['PODCAST_URL']
+    podcast_url = "#{request.base_url}/feed"
     podcast_title = ENV['PODCAST_TITLE']
     build_date = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
     copyright = "© #{Time.now.strftime("%Y")} #{ENV['PODCAST_AUTHOR']}"
