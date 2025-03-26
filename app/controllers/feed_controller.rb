@@ -50,7 +50,7 @@ class FeedController < ApplicationController
     # when running via docker, /media will be mapped to some local volume
     Dir.glob("/media/*").each do |file|
       filename = File.basename(file)
-      next if !filename.include?(".mp3")
+      next if !filename.include?(".mp3") || !filename.include?(".mp4")
 
       pubDate = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
       author = ENV['PODCAST_AUTHOR']
