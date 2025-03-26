@@ -3,6 +3,13 @@
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = "1.0"
 
+# global constant for directory containing podcast episodes
+ASSETS_DIR = begin
+  # when running in docker, we're not passing this env var in, so it'll default to the mounted dir, 'media'
+  env_value = ENV.fetch("PODCAST_EPISODE_PATH", "/media")
+end.freeze
+
+
 # Add additional assets to the asset load path.
 # Rails.application.config.assets.paths << Emoji.images_path
 

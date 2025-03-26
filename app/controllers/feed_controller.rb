@@ -46,11 +46,12 @@ class FeedController < ApplicationController
 
   def episode_xml
     result = ''
+    supported_filetypes = [".mp3", ".mp4"]
 
     # when running via docker, /media will be mapped to some local volume
-    Dir.glob("/media/*").each do |file|
+    Dir.glob("#{ASSETS_DIR}/*").each do |file|
       filename = File.basename(file)
-      next if !filename.include?(".mp3") || !filename.include?(".mp4")
+      next if !supported_filetypes.any?{|ext| filename.include?(ext)}
 
       pubDate = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
       author = ENV['PODCAST_AUTHOR']
@@ -59,7 +60,7 @@ class FeedController < ApplicationController
       length = "18863" # TODO: calculate this
       duration = "12" # TODO: calculate this
       type = "audio/mpeg"
-      file_url = "#{ENV['PODCAST_EPISODE_URL']}#{filename}"
+      file_url = "#{request.base_url}/assets/#{filename}"
 
       result << <<~XML
         <item>

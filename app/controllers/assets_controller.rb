@@ -1,9 +1,8 @@
 class AssetsController < ApplicationController
-  ASSETS_PATH = "/media"
 
   def serve
     filename = params[:filename]
-    filepath = File.join(ASSETS_PATH, filename)
+    filepath = File.join(ASSETS_DIR, filename)
 
     if File.exist?(filepath)
       send_file(filepath, disposition: 'inline')
