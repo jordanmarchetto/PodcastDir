@@ -1,4 +1,6 @@
 class FeedController < ApplicationController
+  require "mp3info"
+
   def index
     xml_content = channel_xml + episode_xml + closing_xml
 
@@ -51,14 +53,15 @@ class FeedController < ApplicationController
     # when running via docker, /media will be mapped to some local volume
     Dir.glob("#{ASSETS_DIR}/*").each do |file|
       filename = File.basename(file)
+      mp3 = Mp3Info.open(file) rescue nil
       next if !supported_filetypes.any?{|ext| filename.include?(ext)}
 
       pubDate = Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")
-      author = ENV['PODCAST_AUTHOR']
-      title = "Ep: #{filename}"
-      description = "Description of #{filename}"
-      length = "18863" # TODO: calculate this
-      duration = "12" # TODO: calculate this
+      author = mp3&.tag&.artist || ENV['PODCAST_AUTHOR']
+      title = mp3&.tag&.title || filename
+      description = mp3&.tag&.title || "Description of #{filename}"
+      length = File.size(file)
+      duration = mp3.length.to_i || 1
       type = "audio/mpeg"
       file_url = "#{request.base_url}/assets/#{filename}"
 
