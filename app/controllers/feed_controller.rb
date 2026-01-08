@@ -1,5 +1,7 @@
 class FeedController < ApplicationController
   require "mp3info"
+  require "erb"
+  include ERB::Util
 
   def index
     xml_content = channel_xml + episode_xml + closing_xml
@@ -16,6 +18,7 @@ class FeedController < ApplicationController
     copyright = "© #{Time.now.strftime("%Y")} #{ENV['PODCAST_AUTHOR']}"
     guid = SecureRandom.uuid
     author = ENV['PODCAST_AUTHOR']
+    email = ENV['PODCAST_EMAIL']
     description = ENV['PODCAST_DESCRIPTION']
 
     <<~XML
@@ -35,6 +38,8 @@ class FeedController < ApplicationController
       <description><![CDATA[<p>#{description}</p>]]></description>
       <itunes:owner>
         <itunes:name>#{author}</itunes:name>
+        <itunes:email>#{email}</itunes:email>
+        <itunes:category>podcast</itunes:category>
       </itunes:owner>
       XML
   end
@@ -63,7 +68,7 @@ class FeedController < ApplicationController
       length = File.size(file)
       duration = mp3.length.to_i || 1
       type = "audio/mpeg"
-      file_url = "#{request.base_url}/assets/#{filename}"
+      file_url = "#{request.base_url}/assets/#{url_encode(filename)}"
 
       result << <<~XML
         <item>
